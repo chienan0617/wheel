@@ -23,7 +23,6 @@
     }
   </script>
   <style>
-    /* 強制鎖定螢幕不準捲動 */
     body,
     html {
       margin: 0;
@@ -33,12 +32,10 @@
       overflow: hidden;
       background: #0a0a12;
       touch-action: manipulation;
-      /* 防止雙擊縮放 */
     }
 
     .app-container {
       height: 100dvh;
-      /* 動態視窗高度 */
       display: flex;
       flex-direction: column;
       max-width: 500px;
@@ -47,19 +44,17 @@
       border-right: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    /* 關鍵：轉盤大小自適應 */
     .wheel-wrapper {
       flex: 1;
-      /* 佔據所有剩餘空間 */
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 10px;
+      min-height: 0;
     }
 
     .wheel-container {
       position: relative;
-      /* 轉盤寬度取寬與高之中較小者的 85% */
       width: min(85vw, 45vh);
       height: min(85vw, 45vh);
       max-width: 340px;
@@ -76,34 +71,7 @@
       transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
     }
 
-    /* 調整每一格的容器，確保能橫向撐開 */
-    /* 調整文字排版為直向（鉛直方向） */
-    .wheel-text {
-      text-align: center;
-      font-weight: 800;
-      color: white;
-      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
-
-      /* 核心修改：旋轉文字 90 度，使其與半徑平行 */
-      transform: rotate(90deg);
-      transform-origin: center center;
-
-      /* 寬度限制：這決定了文字能從圓心向外延伸多長 */
-      width: 120px;
-      white-space: nowrap;
-      /* 確保文字不會換行 */
-      overflow: hidden;
-      text-overflow: ellipsis;
-      /* 太長會變 ... */
-
-      /* 文字大小自適應 */
-      font-size: clamp(10px, 2.8vw, 16px);
-
-      /* 微調位置：讓文字在格子中間靠外一點點 */
-      margin-top: 40px;
-    }
-
-    /* 確保容器位置正確 */
+    /* 修正後的鉛直文字樣式 */
     .wheel-item {
       position: absolute;
       top: 0;
@@ -113,8 +81,23 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      /* 文字從圓盤邊緣開始往內排 */
       transform-origin: center center;
+    }
+
+    .wheel-text {
+      text-align: center;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+      transform: rotate(90deg);
+      transform-origin: center center;
+      width: 110px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: clamp(10px, 2.5vw, 15px);
+      margin-top: 35px;
+      /* 控制文字與外圈距離 */
     }
 
     .wheel-pointer {
@@ -131,9 +114,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 20%;
-      height: 20%;
-      /* 比例固定 */
+      width: 22%;
+      height: 22%;
       background: #0a0a12;
       border-radius: 50%;
       z-index: 30;
@@ -144,20 +126,59 @@
       justify-content: center;
     }
 
+    .wheel-center img {
+      width: 70%;
+      height: 70%;
+      object-fit: contain;
+    }
+
     .glass-card {
       background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(8px);
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
+
+    /* Loading 動畫 */
+    #loadingOverlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #0a0a12;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* 修正這裡：加上 align- 並且使用冒號 */
+      justify-content: center;
+    }
+
+    .loader {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #4d089a;
+      border-top-color: #00d2ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
   </style>
 </head>
 
 <body class="font-display text-slate-200">
+  <div id="loadingOverlay">
+    <div class="loader mb-4"></div>
+    <p class="text-cyber-blue font-bold animate-pulse">LOADING DATA...</p>
+  </div>
 
   <div class="app-container">
     <header class="flex items-center p-5 justify-between flex-none">
       <h1 class="text-xl font-black text-white italic tracking-tighter uppercase">捷運轉轉轉盤</h1>
-      <button id="historyBtn" class="size-10 rounded-xl glass-card flex items-center justify-center text-cyber-blue">
+      <button id="historyBtn"
+        class="size-10 rounded-xl glass-card flex items-center justify-center text-cyber-blue active:scale-90 transition-transform">
         <span class="material-symbols-outlined">history</span>
       </button>
     </header>
@@ -166,7 +187,7 @@
       <div class="px-6 mb-2">
         <div class="glass-card p-3 rounded-2xl">
           <label
-            class="text-[10px] font-bold text-cyber-blue uppercase tracking-widest mb-1 block text-center">分類</label>
+            class="text-[10px] font-bold text-cyber-blue uppercase tracking-widest mb-1 block text-center">切換路線</label>
           <select id="collectionSelect"
             class="w-full bg-transparent text-white border-none outline-none cursor-pointer font-bold text-sm text-center"></select>
         </div>
@@ -182,14 +203,14 @@
           </div>
           <div class="wheel" id="luckyWheel"></div>
           <div class="wheel-center">
-            <img src="logo.png">
+            <img src="logo.png" alt="Logo">
           </div>
         </div>
       </div>
 
       <div class="px-6 grid grid-cols-2 gap-3 mb-4 flex-none">
         <div class="glass-card p-3 rounded-2xl text-center">
-          <p class="text-[9px] text-slate-500 font-bold uppercase">總數</p>
+          <p class="text-[9px] text-slate-500 font-bold uppercase">站點總數</p>
           <p class="text-lg font-black text-white" id="totalItems">0</p>
         </div>
         <div class="glass-card p-3 rounded-2xl text-center border-r-4 border-r-cyber-blue">
@@ -201,8 +222,8 @@
 
     <footer class="p-6 flex-none">
       <button id="spinBtn"
-        class="w-full h-14 rounded-2xl bg-gradient-to-r from-cyber-purple via-cyber-pink to-cyber-blue shadow-glow flex items-center justify-center gap-3 transition-transform active:scale-95">
-        <span class="text-white font-black tracking-widest uppercase">決定等等的命運</span>
+        class="w-full h-14 rounded-2xl bg-gradient-to-r from-cyber-purple via-cyber-pink to-cyber-blue shadow-glow flex items-center justify-center gap-3 transition-all active:scale-95">
+        <span class="text-white font-black tracking-widest uppercase text-sm">決定等等的命運</span>
         <span class="material-symbols-outlined text-white">bolt</span>
       </button>
     </footer>
