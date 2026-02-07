@@ -77,6 +77,33 @@
     }
 
     /* 調整每一格的容器，確保能橫向撐開 */
+    /* 調整文字排版為直向（鉛直方向） */
+    .wheel-text {
+      text-align: center;
+      font-weight: 800;
+      color: white;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+
+      /* 核心修改：旋轉文字 90 度，使其與半徑平行 */
+      transform: rotate(90deg);
+      transform-origin: center center;
+
+      /* 寬度限制：這決定了文字能從圓心向外延伸多長 */
+      width: 120px;
+      white-space: nowrap;
+      /* 確保文字不會換行 */
+      overflow: hidden;
+      text-overflow: ellipsis;
+      /* 太長會變 ... */
+
+      /* 文字大小自適應 */
+      font-size: clamp(10px, 2.8vw, 16px);
+
+      /* 微調位置：讓文字在格子中間靠外一點點 */
+      margin-top: 40px;
+    }
+
+    /* 確保容器位置正確 */
     .wheel-item {
       position: absolute;
       top: 0;
@@ -86,29 +113,8 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding-top: 15px;
-      /* 距離外圈的距離 */
+      /* 文字從圓盤邊緣開始往內排 */
       transform-origin: center center;
-    }
-
-    /* 核心修改：讓文字橫向 (Horizontal) 排列 */
-    .wheel-text {
-      text-align: center;
-      font-weight: 800;
-      color: white;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-
-      /* 關鍵旋轉：將原本直向的文字轉 90 度變橫向 */
-      writing-mode: horizontal-tb;
-      transform: rotate(0deg);
-      /* 這裡設定 0度，因為外層 item 已經轉過角度了 */
-
-      /* 寬度限制與自動縮放 */
-      width: 60px;
-      /* 根據轉盤大小調整 */
-      word-break: break-all;
-      font-size: clamp(8px, 2vw, 12px);
-      line-height: 1.1;
     }
 
     .wheel-pointer {

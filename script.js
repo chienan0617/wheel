@@ -126,7 +126,7 @@ spinBtn.addEventListener("click", () => {
 
   isSpinning = true;
   spinBtn.disabled = true;
-  resultDisplay.innerText = "Analyzing...";
+  resultDisplay.innerText = "旋轉中...";
 
   wheel.style.transform = `rotate(${rotateTo}deg)`;
   currentRotation = rotateTo;
@@ -154,7 +154,7 @@ function showWinner(winner) {
     color: "#fff",
     html: `
             <div class="p-4">
-                <div class="text-7xl mb-4 drop-shadow-[0_0_15px_#00d2ff]">${winner.icon || "🎁"}</div>
+                <div class="text-7xl mb-4 drop-shadow-[0_0_15px_#00d2ff]">${"🚇" || "🎁"}</div>
                 <h2 class="text-3xl font-black text-cyber-blue italic uppercase">${winner.text}</h2>
                 <p class="mt-4 text-slate-400 text-xs">REWARD SECURED AT ${now}</p>
             </div>
@@ -171,7 +171,7 @@ document.getElementById("historyBtn").addEventListener("click", () => {
         (h) => `
         <div class="flex items-center justify-between p-3 border-b border-white/5">
             <div class="flex items-center gap-3">
-                <span class="text-xl">${h.icon || "✨"}</span>
+                <span class="text-xl">${"-" || ""}</span>
                 <span class="font-bold text-cyber-blue">${h.text}</span>
             </div>
             <span class="text-[10px] text-slate-500">${h.time}</span>
