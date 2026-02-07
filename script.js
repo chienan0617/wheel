@@ -72,7 +72,7 @@ function initWheel() {
   const items = collections[select.value] || [];
   const sliceAngle = 360 / items.length;
 
-  // 生成顏色漸層
+  // 生成配色 (只有 text, color, chance)
   let gradient = items.map((item, i) => {
     const color = item.color || colorPalette[i % colorPalette.length];
     return `${color} ${i * (100 / items.length)}% ${(i + 1) * (100 / items.length)}%`;
@@ -83,11 +83,13 @@ function initWheel() {
   items.forEach((item, i) => {
     const div = document.createElement("div");
     div.className = "wheel-item";
+
+    // 設定每一格旋轉角度
     div.style.transform = `rotate(${i * sliceAngle + sliceAngle / 2}deg)`;
+
     div.innerHTML = `
             <div class="wheel-text">
-                <span class="text-xl">${item.icon || "💎"}</span>
-                <span class="text-[10px] mt-1 tracking-tighter uppercase font-bold">${item.text}</span>
+                ${item.text}
             </div>
         `;
     wheel.appendChild(div);

@@ -76,6 +76,7 @@
       transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
     }
 
+    /* 調整每一格的容器，確保能橫向撐開 */
     .wheel-item {
       position: absolute;
       top: 0;
@@ -85,21 +86,29 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding-top: 10%;
-      /* 使用百分比確保文字位置隨比例縮放 */
+      padding-top: 15px;
+      /* 距離外圈的距離 */
       transform-origin: center center;
     }
 
+    /* 核心修改：讓文字橫向 (Horizontal) 排列 */
     .wheel-text {
       text-align: center;
       font-weight: 800;
       color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-      font-size: clamp(10px, 2.5vw, 14px);
-      /* 文字大小隨螢幕縮放 */
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+
+      /* 關鍵旋轉：將原本直向的文字轉 90 度變橫向 */
+      writing-mode: horizontal-tb;
+      transform: rotate(0deg);
+      /* 這裡設定 0度，因為外層 item 已經轉過角度了 */
+
+      /* 寬度限制與自動縮放 */
+      width: 60px;
+      /* 根據轉盤大小調整 */
+      word-break: break-all;
+      font-size: clamp(8px, 2vw, 12px);
+      line-height: 1.1;
     }
 
     .wheel-pointer {
