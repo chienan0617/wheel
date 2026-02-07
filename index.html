@@ -169,9 +169,18 @@
 </head>
 
 <body class="font-display text-slate-200">
+  <script>
+    async function loadData() {
+      console.log(await fetch("https://note-do.cas617.workers.dev/v/active"));
+    }
+
+    loadData();
+  </script>
+
+
   <div id="loadingOverlay">
     <div class="loader mb-4"></div>
-    <p class="text-cyber-blue font-bold animate-pulse">Connecting to NASA...</p>
+    <p class="text-cyber-blue font-bold animate-pulse">Con...</p>
   </div>
 
   <div class="app-container">
