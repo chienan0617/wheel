@@ -165,6 +165,39 @@
         transform: rotate(360deg);
       }
     }
+
+    /* 讓下拉選單的選項在手機上更好點擊，且文字更清晰 */
+    #collectionSelect {
+      background-image: linear-gradient(to right, #00d2ff, #f425af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      /* 讓選中的字體有發光感 */
+      filter: drop-shadow(0 0 2px rgba(0, 210, 255, 0.5));
+    }
+
+    /* 針對下拉選單內容 (不同瀏覽器支援度不同，但可增加基本樣式) */
+    #collectionSelect option {
+      background: #0a0a12;
+      color: #fff;
+      padding: 10px;
+    }
+
+    /* 輕微跳動動畫吸引注意 */
+    .glass-card.border-cyber-blue {
+      animation: borderGlow 3s infinite alternate;
+    }
+
+    @keyframes borderGlow {
+      from {
+        border-color: #4d089a;
+        box-shadow: 0 0 5px #4d089a;
+      }
+
+      to {
+        border-color: #00d2ff;
+        box-shadow: 0 0 15px #00d2ff;
+      }
+    }
   </style>
 </head>
 
@@ -195,10 +228,17 @@
     <main class="flex-1 flex flex-col min-h-0">
       <div class="px-6 mb-2">
         <div class="glass-card p-3 rounded-2xl">
-          <label
-            class="text-[10px] font-bold text-cyber-blue uppercase tracking-widest mb-1 block text-center">切換路線</label>
-          <select id="collectionSelect"
-            class="w-full bg-transparent text-white border-none outline-none cursor-pointer font-bold text-sm text-center"></select>
+          <div class="px-6 mb-4">
+            <div class="glass-card p-4 rounded-2xl border-2 border-cyber-blue shadow-[0_0_15px_rgba(0,210,255,0.2)]">
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[10px] font-black text-cyber-blue uppercase tracking-[0.2em]">切換路線</span>
+                <span class="material-symbols-outlined text-cyber-blue text-sm">expand_more</span>
+              </div>
+              <select id="collectionSelect"
+                class="w-full bg-transparent text-white border-none outline-none cursor-pointer font-black text-lg appearance-none">
+              </select>
+            </div>
+          </div>
         </div>
       </div>
 
