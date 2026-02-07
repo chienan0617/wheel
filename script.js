@@ -168,7 +168,7 @@ function showWinner(winner) {
       <div class="p-4">
         <div class="text-7xl mb-4">🚇</div>
         <h2 class="text-2xl font-black text-cyber-blue uppercase italic">${winner.text}</h2>
-        <p class="mt-4 text-slate-500 text-[10px] tracking-widest">ARRIVED AT ${now}</p>
+        <p class="mt-4 text-slate-500 text-[10px] tracking-widest">${now}</p>
       </div>
     `,
     confirmButtonText: "收下命運",
@@ -191,7 +191,7 @@ document.getElementById("historyBtn").addEventListener("click", () => {
       .join("") || '<p class="py-10 text-slate-500">尚無紀錄</p>';
 
   Swal.fire({
-    title: "乘車紀錄",
+    title: "紀錄",
     background: "#0a0a12",
     color: "#fff",
     html: `<div class="max-h-80 overflow-y-auto">${content}</div>`,
