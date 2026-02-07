@@ -3,8 +3,8 @@
 
 <head>
   <meta charset="utf-8" />
-  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Cyber Lucky Wheel</title>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+  <title>捷運轉轉轉轉轉盤</title>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link href="https://fonts.googleapis.com/css2?family=Spline+Sans:wght@300;400;500;600;700&display=swap"
     rel="stylesheet" />
@@ -16,39 +16,54 @@
       darkMode: "class",
       theme: {
         extend: {
-          colors: {
-            "cyber-purple": "#4d089a",
-            "cyber-blue": "#00d2ff",
-            "cyber-pink": "#f425af",
-            "dark-bg": "#0a0a12",
-          },
-          fontFamily: { "display": ["Spline Sans", "sans-serif"] },
-          boxShadow: { 'glow': '0 0 20px rgba(0, 210, 255, 0.4), 0 0 40px rgba(77, 8, 154, 0.2)' }
+          colors: { "cyber-purple": "#4d089a", "cyber-blue": "#00d2ff", "cyber-pink": "#f425af", "dark-bg": "#0a0a12" },
+          boxShadow: { 'glow': '0 0 20px rgba(0, 210, 255, 0.4)' }
         },
       },
     }
   </script>
   <style>
-    body {
-      background: radial-gradient(circle at top right, #1a1a2e, #0a0a12);
-      min-height: 100vh;
+    /* 強制鎖定螢幕不準捲動 */
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      background: #0a0a12;
+      touch-action: manipulation;
+      /* 防止雙擊縮放 */
     }
 
-    /* 玻璃擬態容器 */
-    .glass-card {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    .app-container {
+      height: 100dvh;
+      /* 動態視窗高度 */
+      display: flex;
+      flex-direction: column;
+      max-width: 500px;
+      margin: 0 auto;
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* 關鍵：轉盤大小自適應 */
+    .wheel-wrapper {
+      flex: 1;
+      /* 佔據所有剩餘空間 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
     }
 
     .wheel-container {
       position: relative;
-      width: 100%;
-      aspect-ratio: 1/1;
+      /* 轉盤寬度取寬與高之中較小者的 85% */
+      width: min(85vw, 45vh);
+      height: min(85vw, 45vh);
       max-width: 340px;
-      margin: 0 auto;
-      filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.3));
+      max-height: 340px;
     }
 
     .wheel {
@@ -61,15 +76,6 @@
       transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
     }
 
-    /* 轉盤表面光澤 */
-    .wheel::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%);
-      pointer-events: none;
-    }
-
     .wheel-item {
       position: absolute;
       top: 0;
@@ -79,7 +85,8 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding-top: 30px;
+      padding-top: 10%;
+      /* 使用百分比確保文字位置隨比例縮放 */
       transform-origin: center center;
     }
 
@@ -91,16 +98,17 @@
       flex-direction: column;
       align-items: center;
       text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-      z-index: 10;
+      font-size: clamp(10px, 2.5vw, 14px);
+      /* 文字大小隨螢幕縮放 */
     }
 
     .wheel-pointer {
       position: absolute;
-      top: -20px;
+      top: -15px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 40;
-      filter: drop-shadow(0 0 10px #00d2ff);
+      filter: drop-shadow(0 0 8px #00d2ff);
     }
 
     .wheel-center {
@@ -108,117 +116,78 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 60px;
-      height: 60px;
+      width: 20%;
+      height: 20%;
+      /* 比例固定 */
       background: #0a0a12;
       border-radius: 50%;
       z-index: 30;
-      border: 3px solid #00d2ff;
-      box-shadow: 0 0 20px #4d089a;
-      padding: 10px;
+      border: 2px solid #00d2ff;
+      box-shadow: 0 0 15px #4d089a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* 動態漸層按鈕 */
-    .btn-gradient {
-      background: linear-gradient(90deg, #4d089a, #f425af, #00d2ff);
-      background-size: 200% auto;
-      transition: 0.5s;
-    }
-
-    .btn-gradient:hover {
-      background-position: right center;
-    }
-
-    /* 載入動畫 */
-    .loader {
-      width: 48px;
-      height: 48px;
-      border: 5px solid #FFF;
-      border-bottom-color: #00d2ff;
-      border-radius: 50%;
-      display: inline-block;
-      animation: rotation 1s linear infinite;
-    }
-
-    @keyframes rotation {
-      0% {
-        transform: rotate(0deg)
-      }
-
-      100% {
-        transform: rotate(360deg)
-      }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
   </style>
 </head>
 
-<body class="font-display text-slate-200 antialiased overflow-hidden">
+<body class="font-display text-slate-200">
 
-  <div id="loadingOverlay" class="fixed inset-0 z-[100] bg-dark-bg flex flex-col items-center justify-center">
-    <span class="loader mb-4"></span>
-    <p class="text-cyber-blue font-bold tracking-widest animate-pulse">SYNCING DATA...</p>
-  </div>
-
-  <div
-    class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto shadow-2xl overflow-hidden border-x border-white/5">
-
-    <header class="flex items-center p-6 justify-between z-10">
-      <div class="flex items-center gap-2">
-        <div class="size-3 bg-cyber-pink rounded-full animate-ping"></div>
-        <h1 class="text-xl font-black text-white uppercase italic tracking-tighter">Cyber-Spin</h1>
-      </div>
-      <button id="historyBtn"
-        class="size-10 rounded-xl glass-card flex items-center justify-center text-cyber-blue hover:scale-110 transition-transform">
+  <div class="app-container">
+    <header class="flex items-center p-5 justify-between flex-none">
+      <h1 class="text-xl font-black text-white italic tracking-tighter uppercase">捷運轉轉轉盤</h1>
+      <button id="historyBtn" class="size-10 rounded-xl glass-card flex items-center justify-center text-cyber-blue">
         <span class="material-symbols-outlined">history</span>
       </button>
     </header>
 
-    <main class="flex-1 flex flex-col items-center px-6 gap-6 overflow-y-auto">
-
-      <div class="w-full glass-card p-4 rounded-2xl">
-        <label class="text-[10px] font-bold text-cyber-blue uppercase tracking-widest mb-2 block">System
-          Collection</label>
-        <select id="collectionSelect"
-          class="w-full bg-transparent text-white border-none outline-none cursor-pointer font-bold py-1"></select>
-      </div>
-
-      <div class="wheel-container">
-        <div class="wheel-pointer">
-          <svg width="40" height="50" viewBox="0 0 40 50" fill="none">
-            <path d="M20 50L38 15C38 15 40 5 30 0H10C0 5 2 15 2 15L20 50Z" fill="url(#ptr_grad)" stroke="white"
-              stroke-width="1.5" />
-            <defs>
-              <linearGradient id="ptr_grad" x1="20" y1="0" x2="20" y2="50" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#00d2ff" />
-                <stop offset="1" stop-color="#4d089a" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-        <div class="wheel" id="luckyWheel"></div>
-        <div class="wheel-center">
-          <img src="https://cdn-icons-png.flaticon.com/512/10473/10473631.png" class="w-full h-full object-contain"
-            id="centerLogo">
+    <main class="flex-1 flex flex-col min-h-0">
+      <div class="px-6 mb-2">
+        <div class="glass-card p-3 rounded-2xl">
+          <label
+            class="text-[10px] font-bold text-cyber-blue uppercase tracking-widest mb-1 block text-center">分類</label>
+          <select id="collectionSelect"
+            class="w-full bg-transparent text-white border-none outline-none cursor-pointer font-bold text-sm text-center"></select>
         </div>
       </div>
 
-      <div class="w-full grid grid-cols-2 gap-4">
-        <div class="glass-card p-4 rounded-3xl">
-          <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Slots</p>
-          <p class="text-xl font-black text-white" id="totalItems">0</p>
-        </div>
-        <div class="glass-card p-4 rounded-3xl border-r-4 border-r-cyber-blue">
-          <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Status</p>
-          <p class="text-sm font-bold text-cyber-blue" id="resultDisplay">Ready</p>
+      <div class="wheel-wrapper">
+        <div class="wheel-container">
+          <div class="wheel-pointer">
+            <svg width="30" height="40" viewBox="0 0 40 50">
+              <path d="M20 50L38 15C38 15 40 5 30 0H10C0 5 2 15 2 15L20 50Z" fill="#00d2ff" stroke="white"
+                stroke-width="2" />
+            </svg>
+          </div>
+          <div class="wheel" id="luckyWheel"></div>
+          <div class="wheel-center">
+            <img src="logo.png" class="w-2/3 h-2/3 object-contain">
+          </div>
         </div>
       </div>
 
+      <div class="px-6 grid grid-cols-2 gap-3 mb-4 flex-none">
+        <div class="glass-card p-3 rounded-2xl text-center">
+          <p class="text-[9px] text-slate-500 font-bold uppercase">總數</p>
+          <p class="text-lg font-black text-white" id="totalItems">0</p>
+        </div>
+        <div class="glass-card p-3 rounded-2xl text-center border-r-4 border-r-cyber-blue">
+          <p class="text-[9px] text-slate-500 font-bold uppercase">狀態</p>
+          <p class="text-xs font-bold text-cyber-blue truncate" id="resultDisplay">已就緒</p>
+        </div>
+      </div>
     </main>
 
-    <footer class="p-8">
+    <footer class="p-6 flex-none">
       <button id="spinBtn"
-        class="btn-gradient w-full h-16 rounded-2xl shadow-glow flex items-center justify-center gap-3 active:scale-95">
-        <span class="text-white text-lg font-black tracking-widest uppercase">Execute Spin</span>
+        class="w-full h-14 rounded-2xl bg-gradient-to-r from-cyber-purple via-cyber-pink to-cyber-blue shadow-glow flex items-center justify-center gap-3 transition-transform active:scale-95">
+        <span class="text-white font-black tracking-widest uppercase">決定等等的命運</span>
         <span class="material-symbols-outlined text-white">bolt</span>
       </button>
     </footer>

@@ -154,7 +154,6 @@ function showWinner(winner) {
             <div class="p-4">
                 <div class="text-7xl mb-4 drop-shadow-[0_0_15px_#00d2ff]">${winner.icon || "🎁"}</div>
                 <h2 class="text-3xl font-black text-cyber-blue italic uppercase">${winner.text}</h2>
-                <div class="mt-4 h-1 w-full bg-gradient-to-r from-cyber-purple to-cyber-pink"></div>
                 <p class="mt-4 text-slate-400 text-xs">REWARD SECURED AT ${now}</p>
             </div>
         `,
@@ -180,7 +179,7 @@ document.getElementById("historyBtn").addEventListener("click", () => {
       .join("") || '<p class="py-10 text-slate-500">No records found</p>';
 
   Swal.fire({
-    title: "MISSION HISTORY",
+    title: "歷史紀錄",
     background: "#0a0a12",
     color: "#fff",
     html: `<div class="max-h-80 overflow-y-auto">${content}</div>`,
