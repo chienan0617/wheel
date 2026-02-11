@@ -213,17 +213,30 @@
 
   <div id="loadingOverlay">
     <div class="loader mb-4"></div>
-    <p class="text-cyber-blue font-bold animate-pulse">Con...</p>
+    <p class="text-cyber-blue font-bold animate-pulse">Connecting to NASA</p>
   </div>
 
   <div class="app-container">
-    <header class="flex items-center p-5 justify-between flex-none">
-      <h1 class="text-xl font-black text-white italic tracking-tighter uppercase">捷運轉轉轉盤</h1>
-      <button id="historyBtn"
-        class="size-10 rounded-xl glass-card flex items-center justify-center text-cyber-blue active:scale-90 transition-transform">
-        <span class="material-symbols-outlined">history</span>
-      </button>
-    </header>
+    <header class="flex items-center p-5 justify-between flex-none gap-2">
+  <h1 class="text-xl font-black text-white italic tracking-tighter uppercase shrink-0">捷運轉轉轉盤</h1>
+  
+  <div class="flex items-center gap-3">
+    <a href="https://chienan0617.github.io/Brand"
+       class="relative px-4 py-2 rounded-full bg-[#f0ff42] text-black text-xs font-black uppercase tracking-wider shadow-[0_0_20px_rgba(240,255,66,0.8)] animate-pulse-slow hover:scale-110 active:scale-95 transition-all flex items-center gap-1 border-2 border-black/10">
+      <span>更多好玩</span>
+
+      <span class="absolute -top-1 -right-1 flex h-4 w-4">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#f425af] opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-4 w-4 bg-[#f425af] border-2 border-white"></span>
+      </span>
+    </a>
+
+    <button id="historyBtn"
+      class="size-10 rounded-xl glass-card flex items-center justify-center text-cyber-blue active:scale-90 transition-transform border border-white/10">
+      <span class="material-symbols-outlined">history</span>
+    </button>
+  </div>
+</header>
 
     <main class="flex-1 flex flex-col min-h-0">
       <div class="px-6 mb-2">
